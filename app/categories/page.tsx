@@ -6,7 +6,7 @@ import { apiFetch } from "../lib/api";
 
 interface Category {
   id: string;
-  name: string;
+  categoryName: string;
   description: string;
 }
 
@@ -16,20 +16,15 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
     fetchCategories();
   }, []);
 
   const fetchCategories = async () => {
     try {
-      const data = await apiFetch("/api/Category/GetAll");
+      const data = await apiFetch("/api/Category/all");
       setCategories(data);
     } catch {
-      router.push("/login");
+      setCategories([]);
     } finally {
       setLoading(false);
     }
@@ -61,7 +56,7 @@ export default function CategoriesPage() {
                 onClick={() => router.push(`/products?category=${category.id}`)}
                 className="bg-white rounded-lg shadow p-6 cursor-pointer hover:shadow-md transition-shadow"
               >
-                <h2 className="text-xl font-semibold mb-2">{category.name}</h2>
+                <h2 className="text-xl font-semibold mb-2">{category.categoryName}</h2>
                 <p className="text-gray-600 text-sm">{category.description}</p>
               </div>
             ))}

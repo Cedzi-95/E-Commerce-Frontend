@@ -1,13 +1,20 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
-    router.push("/login");
+    setIsLoggedIn(false);
+    router.push("/products");
   };
 
   return (
@@ -18,9 +25,15 @@ export default function Navbar() {
       <div className="flex gap-6">
         <Link href="/categories" className="hover:text-gray-300">Categories</Link>
         <Link href="/products" className="hover:text-gray-300">Products</Link>
-        <Link href="/cart" className="hover:text-gray-300">Cart</Link>
-        <Link href="/orders" className="hover:text-gray-300">My Orders</Link>
-        <button onClick={logout} className="hover:text-red-400">Logout</button>
+        {isLoggedIn ? (
+          <>
+            <Link href="/cart" className="hover:text-gray-300">Cart</Link>
+            <Link href="/orders" className="hover:text-gray-300">My Orders</Link>
+            <button onClick={logout} className="hover:text-red-400">Logout</button>
+          </>
+        ) : (
+          <Link href="/login" className="hover:text-gray-300">Login</Link>
+        )}
       </div>
     </nav>
   );

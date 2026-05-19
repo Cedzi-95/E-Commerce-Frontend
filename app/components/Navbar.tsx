@@ -20,7 +20,7 @@ export default function Navbar() {
   return (
     <nav className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
       <Link href="/products" className="text-xl font-bold">
-        🛒 EcommerceApi
+       <h1>🛒 Cedzi-Commerce</h1> 
       </Link>
       <div className="flex gap-6">
         <Link href="/categories" className="hover:text-gray-300">Categories</Link>

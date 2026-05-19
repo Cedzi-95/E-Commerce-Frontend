@@ -17,12 +17,18 @@ export default function ProductsPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const categoryId = searchParams.get("category");
+    const [search, setSearch] = useState("");
 
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [addingId, setAddingId] = useState<string | null>(null);
     const [message, setMessage] = useState("");
 
+    const filteredProducts = products.filter(
+        (p) =>
+            p.name.toLowerCase().includes(search.toLowerCase()) ||
+            p.description.toLowerCase().includes(search.toLowerCase())
+    );
     useEffect(() => {
         fetchProducts();
     }, [categoryId]);
@@ -81,7 +87,7 @@ export default function ProductsPage() {
             <div className="max-w-6xl mx-auto p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold">
-                        {categoryId ? categoryName : "All Products"}
+                        {categoryId ? categoryName : " Products"}
                     </h1>
                     {categoryId && (
                         <button
@@ -92,6 +98,15 @@ export default function ProductsPage() {
                         </button>
                     )}
                 </div>
+                <div className="mb-6">
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 bg-white shadow-sm"
+                    />
+                </div>
 
                 {message && (
                     <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
@@ -100,7 +115,7 @@ export default function ProductsPage() {
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {products.map((product) => (
+                    {filteredProducts.map((product) => (
                         <div
                             key={product.id}
                             className="bg-white rounded-lg shadow p-6 cursor-pointer hover:shadow-md transition-shadow"

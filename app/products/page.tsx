@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Navbar from "../components/Navbar";
 import { apiFetch } from "../lib/api";
@@ -13,7 +14,7 @@ interface Product {
     isAvailable: boolean;
 }
 
-export default function ProductsPage() {
+function ProductsContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const categoryId = searchParams.get("category");
@@ -143,4 +144,12 @@ export default function ProductsPage() {
             </div>
         </div>
     );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><p className="text-gray-500">Loading...</p></div>}>
+      <ProductsContent />
+    </Suspense>
+  );
 }
